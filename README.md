@@ -12,7 +12,7 @@
 
 ### 说明
 
-(修改自)[https://github.com/ZYF99/UIKit]
+[修改自UIKit](https://github.com/ZYF99/UIKit)
 
 在布局文件中直接使用
 ```
