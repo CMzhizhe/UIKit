@@ -1,8 +1,21 @@
 # UIKit
 
-### 说明
 
+### 说明
 [修改自UIKit](https://github.com/ZYF99/UIKit)
+
+### 引入
+```
+dependencyResolutionManagement {
+		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+		repositories {
+			mavenCentral()
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+ implementation 'com.github.CMzhizhe:UIKit:v1.0.0'
+```
 
 ### 效果
 ![效果](https://github.com/CMzhizhe/UIKit/blob/master/img/Screenshot_20240716_171547.png)
