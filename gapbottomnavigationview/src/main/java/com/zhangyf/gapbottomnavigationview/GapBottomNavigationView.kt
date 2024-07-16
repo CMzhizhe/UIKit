@@ -12,7 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class GapBottomNavigationView : BottomNavigationView {
 
-    private var fabId = 0 //凹陷View的id
+
     private var centerRadius: Float = 0.toFloat() //中间凹陷的半径
     private var cornerRadius = 12f //拐角处的圆滑大小（越大越平滑）
     private var shadowLength = 6f //阴影大小
@@ -35,86 +35,43 @@ class GapBottomNavigationView : BottomNavigationView {
     @SuppressLint("DrawAllocation")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
+        super.onDraw(canvas);
         val paint = Paint()
         val path = Path()
 
-        //左边的半圆
-        val rectL = RectF(
-            shadowLength,
-            shadowLength,
-            height.toFloat() + shadowLength,
-            height.toFloat() - shadowLength
-        )
-        path.arcTo(rectL, 90.toFloat(), 180.toFloat(), false)
-
+        path.moveTo(0.0f,height.toFloat())
+        path.lineTo(0.0f,shadowLength)
+        val rectFRadius = cornerRadius
+        //绘制圆角
+        path.arcTo(RectF(0.0f,shadowLength,2 * rectFRadius,2 * rectFRadius),180.toFloat(),90.toFloat(),false)
+        //绘制直线
         path.lineTo(width / 2 - centerRadius - cornerRadius, shadowLength)
-
         //左边转角处
-        path.quadTo(
-            width / 2 - centerRadius,
-            shadowLength,
-            width / 2 - centerRadius,
-            cornerRadius + shadowLength
-        )
+        path.quadTo(width / 2 - centerRadius, shadowLength, width / 2 - centerRadius, cornerRadius + shadowLength)
 
         //中间凹陷的半圆
-        val rectCenter = RectF(
-            width / 2 - centerRadius,
-            cornerRadius + shadowLength - centerRadius,
-            width / 2 + centerRadius,
-            cornerRadius + centerRadius + shadowLength
-        )
-
-        path.arcTo(rectCenter, 180.toFloat(), (-180).toFloat(), false)
-
-
-        //利用贝塞尔曲线画中间凹陷（非半圆）
-/*		path.quadTo(
-			width.toFloat() / 2,
-			centerRadius.toFloat(),
-			width / 2 + centerRadius - cornerRadius - cornerRadius / sqrt(2.toFloat()),
-			cornerRadius / sqrt(2.toFloat())
-		)*/
+        path.arcTo(RectF(width / 2 - centerRadius, cornerRadius + shadowLength - centerRadius, width / 2 + centerRadius, cornerRadius + centerRadius + shadowLength
+        ), 180.toFloat(), (-180).toFloat(), false)
 
         //右边转角处
-        path.quadTo(
-            width / 2 + centerRadius,
-            shadowLength,
-            width / 2 + centerRadius + cornerRadius,
-            shadowLength
-        )
-        path.lineTo((width - shadowLength - height / 2), shadowLength)
-
-
-        //右边的半圆
-        val rectR = RectF(
-            width.toFloat() - shadowLength - height,
-            shadowLength,
-            width.toFloat() - shadowLength,
-            height.toFloat() - shadowLength
-        )
-        path.arcTo(rectR, 270.toFloat(), 180.toFloat(), false)
-
-        //最后的直线
-        path.moveTo((width - shadowLength - height / 2), height.toFloat() - shadowLength)
-        path.lineTo(height / 2.toFloat() + shadowLength, height.toFloat() - shadowLength)
-        path.close()
-        Log.d("!!!", "!!!!!!!!!!!!")
-        //关闭硬件加速才能有阴影效果
-        //setLayerType(LAYER_TYPE_SOFTWARE, paint)
-
+        path.quadTo(width / 2 + centerRadius, shadowLength, width / 2 + centerRadius + cornerRadius, shadowLength)
+        path.lineTo(width.toFloat() - 2 * rectFRadius, shadowLength)
+        //绘制圆角
+        path.arcTo(RectF(width.toFloat() - 2 * rectFRadius , shadowLength ,width.toFloat(),2 * rectFRadius),270.toFloat(),90.toFloat(),false)
+        //绘制直线
+        path.lineTo(width.toFloat(), height.toFloat())
         //按背景色填充背景
         paint.apply {
             style = Paint.Style.FILL
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                color = backgroundTintList?.defaultColor ?: Color.BLACK
+                color = backgroundTintList?.defaultColor ?: Color.WHITE
             }
             maskFilter = null
             isAntiAlias = true
             //添加阴影
             setShadowLayer(shadowLength, 0.toFloat(), 0.toFloat(), Color.LTGRAY)
         }
+
         canvas.drawPath(path, paint)
     }
 
